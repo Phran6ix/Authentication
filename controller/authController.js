@@ -87,3 +87,28 @@ exports.protect = async (req, res, next) => {
   req.user = currentUser;
   next();
 };
+
+exports.updatePassword = async (req, res, next) => {
+  //  Find User based on the id and select the password also
+  const user = await User.findById(req.user.id).select("+password");
+
+  const inputPaswword = req.body.password;
+  if (!(await user.checkPassword(inputPassword, user.password)))
+    return res.status(400).json({
+      status: "error",
+      message: "Password not correct",
+    });
+
+  req.body.newPassword = user.password;
+  req.body.confirmPassword = user.confirmPassword;
+
+  await user.save();
+
+  res.status(200).json({
+    status: "success",
+    token,
+    data: {
+      user,
+    },
+  });
+};

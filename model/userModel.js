@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
+const validate = require("validate");
 
 const userSchema = new mongoose.Schema({
   firstName: {
@@ -30,6 +31,12 @@ const userSchema = new mongoose.Schema({
   confirmPassword: {
     type: String,
     require: [true, "confirm your password"],
+    validate: {
+      validator: function (el) {
+        return el === this.password;
+      },
+      message: "Passwords are not the same",
+    },
   },
 });
 

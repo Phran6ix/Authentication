@@ -15,5 +15,10 @@ router.post(
   ],
   authController.login
 );
+router.patch(
+  "/updatePassword",
+  authController.protect,
+  authController.updatePassword
+);
 
 module.exports = router;
